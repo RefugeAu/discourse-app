@@ -39,7 +39,6 @@
     "@types/ws": "^7.2.6",
     "cross-env": "^7.0.3",
     "eslint": "^7.6.0",
-    "eslint-config-kodefox": "^1.2.0",
     "jest": "^26.2.2",
     "prettier": "^2.0.5",
     "ts-jest": "^26.1.4",
@@ -47,7 +46,6 @@
     "typescript": "4.7.4"
   },
   "eslintConfig": {
-    "extends": "kodefox",
     "rules": {
       "operator-assignment": [
         "warn",
