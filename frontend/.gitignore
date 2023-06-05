@@ -8,7 +8,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
-src/generated/**/*.ts
+src/generated
 src/graphql/schema.json
 .env
 playstore_secret.json

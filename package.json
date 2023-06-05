@@ -1,14 +1,14 @@
 {
   "name": "lexicon",
   "scripts": {
-    "dev": "concurrently --kill-others \"pnpm --dir api dev\" \"pnpm --dir frontend start\"",
-    "quickstart": "concurrently --kill-others \"pnpm --dir api quickstart\" \"pnpm --dir frontend quickstart\"",
-    "generate": "pnpm -w api generate && pnpm --dir frontend graphql:generate",
-    "test": "pnpm -w api test && pnpm --dir frontend test",
-    "docs:install": "pnpm --dir documentation install",
-    "docs:build": "pnpm --dir documentation build",
-    "docs:start": "pnpm --dir documentation start",
-    "postinstall": "pnpm --dir api install && pnpm --dir frontend install"
+    "dev": "concurrently --kill-others \"npm --prefix api dev\" \"npm --prefix frontend start\"",
+    "quickstart": "concurrently --kill-others \"npm --prefix api quickstart\" \"npm --prefix frontend quickstart\"",
+    "generate": "npm --prefix api run generate && npm --prefix frontend run graphql:generate",
+    "test": "npm --prefix api test && npm --prefix frontend test",
+    "docs:install": "npm --prefix documentation install",
+    "docs:build": "npm --prefix documentation build",
+    "docs:start": "npm --prefix documentation start",
+    "postinstall": "npm --prefix api install && npm --prefix frontend install"
   },
   "dependencies": {
     "@types/react": "^18.2.8"

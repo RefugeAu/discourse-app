@@ -2,17 +2,17 @@
   "name": "lexicon-api",
   "version": "1.0.0",
   "scripts": {
-    "start": "yarn build && node lib/index.js",
-    "quickstart": "yarn generate && cross-env PROSE_DISCOURSE_HOST=https://meta.discourse.org PROSE_APP_HOSTNAME=0.0.0.0 PROSE_APP_PORT=8929 ts-node-dev --no-notify --respawn --transpile-only src/index.ts",
-    "dev": "yarn generate && ts-node-dev --no-notify --respawn --transpile-only src/index.ts",
+    "start": "npm build && node lib/index.js",
+    "quickstart": "npm generate && cross-env PROSE_DISCOURSE_HOST=https://meta.discourse.org PROSE_APP_HOSTNAME=0.0.0.0 PROSE_APP_PORT=8929 ts-node-dev --no-notify --respawn --transpile-only src/index.ts",
+    "dev": "npm generate && ts-node-dev --no-notify --respawn --transpile-only src/index.ts",
     "typecheck": "tsc --noEmit -p .",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "generate:schema": "cross-env SKIP_VALIDATION=true ts-node --transpile-only src/schema.ts",
-    "generate": "yarn generate:schema",
+    "generate": "npm run generate:schema",
     "lint": "eslint --max-warnings 0 \"src/**/*.{ts,tsx}\"",
     "jest": "cross-env PROSE_DISCOURSE_HOST=https://meta.discourse.org jest --coverage --passWithNoTests",
-    "test": "yarn lint && yarn typecheck && yarn format:check && yarn build && yarn jest",
+    "test": "npm lint && npm typecheck && npm format:check && npm build && npm jest",
     "build": "tsc --outDir lib/"
   },
   "dependencies": {
