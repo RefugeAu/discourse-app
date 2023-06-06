@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Image, Platform, SafeAreaView, View } from 'react-native';
+import { Platform, SafeAreaView } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { DEFAULT_IMAGE } from '../../assets/images';
 import mock from '../__mocks__/mockData';
 import {
   Author,
   CustomHeader,
   HeaderItem,
+  LocalRepliedPost,
   Markdown,
   ModalHeader,
   PostGroupings,
-  RepliedPost,
 } from '../components';
 import { CustomImage, Divider, IconWithLabel, Text } from '../core-ui';
 import {
@@ -20,6 +19,7 @@ import {
   getPostShortUrl,
   sortImageUrl,
   useStorage,
+  generateMarkdownContent,
 } from '../helpers';
 import {
   useEditPost,
@@ -37,7 +37,7 @@ const ios = Platform.OS === 'ios';
 export default function PostPreview() {
   const { setModal } = useModal();
   const styles = useStyles();
-  const { colors, spacing } = useTheme();
+  const { colors } = useTheme();
 
   const navigation = useNavigation<RootStackNavProp<'PostPreview'>>();
   const { navigate, reset, goBack } = navigation;
@@ -65,7 +65,7 @@ export default function PostPreview() {
 
   const navToPostDetail = ({
     topicId,
-    selectedChannelId = ('post' in postData && postData.post?.channel.id) || 0,
+    selectedChannelId = ('channelId' in postData && postData.channelId) || 0,
     focusedPostNumber,
   }: StackRouteProp<'PostDetail'>['params']) => {
     const prevScreen = 'PostPreview';
@@ -103,10 +103,10 @@ export default function PostPreview() {
   });
 
   const { reply: replyTopic, loading: replyLoading } = useReplyTopic({
-    onCompleted: () => {
+    onCompleted: ({ reply: { postNumber } }) => {
       navToPostDetail({
         topicId: ('topicId' in postData && postData.topicId) || 0,
-        focusedPostNumber,
+        focusedPostNumber: postNumber,
       });
     },
     onError: (error) => {
@@ -187,12 +187,12 @@ export default function PostPreview() {
       return;
     }
     if (reply) {
-      const post = 'post' in postData && postData.post;
+      const postNumber = 'postNumber' in postData ? postData.postNumber : null;
       replyTopic({
         variables: {
-          raw: content,
+          content,
           topicId: ('topicId' in postData && postData.topicId) || 0,
-          replyToPostNumber: post ? post.postNumber : null,
+          replyToPostNumber: postNumber,
         },
       });
     } else {
@@ -280,35 +280,21 @@ export default function PostPreview() {
             tags={tags}
           />
         )}
-        {reply && 'post' in postData && postData.post && (
-          <RepliedPost replyTo={postData.post} />
+        {reply && 'replyToPostId' in postData && postData.replyToPostId && (
+          <LocalRepliedPost replyToPostId={postData.replyToPostId} />
         )}
+
         <Markdown
           style={styles.markdown}
-          imageUrls={imageUrls}
-          content={content}
+          content={generateMarkdownContent(content, imageUrls)}
           nonClickable={true}
         />
-        {shortUrls.length > 0 &&
-          !imageUrls &&
-          shortUrls.map((_url, index) => (
-            <View
-              key={index}
-              style={{
-                paddingVertical: spacing.l,
-                marginBottom: spacing.xl,
-              }}
-            >
-              <Image
-                source={DEFAULT_IMAGE}
-                style={{
-                  width: '100%',
-                  height: 200,
-                  borderRadius: 4,
-                }}
-              />
-            </View>
-          ))}
+
+        {/* NOTE: Earlier, this file contained the functionality to show default image if imageUrl is empty and short url length is not 0.
+          
+          It was removed because we already handle invalid url to use default image inside customImage.
+          If we later want to check the old implementation we can check it in PR: https://github.com/kodefox/lexicon/pull/987>
+         */}
 
         {!reply &&
           images?.map((image, index) => (
